@@ -193,8 +193,8 @@ class App extends Component {
           console.log(item.trackDatas)
           return {
             name: item.name,
-            imageURL: item.images[1].url,
-            songs: item.trackDatas.slice(0,5)
+            imageURL: item.images.find(image=>image.height > '200').url,
+            songs: item.trackDatas.slice(0,8)
           }
         })
       }))
