@@ -7,87 +7,6 @@ let defaultStyle = {
   color: '#fff'
 }
 
-let fakeServerData = {
-  user: {
-    name: 'Viren',
-    playlists: [{
-      name: 'chill like daddy',
-      songs: [{
-        name: 'a',
-        duration: 120
-      },
-      {
-        name: 'b',
-        duration: 120
-      },
-      {
-        name: 'c',
-        duration: 120
-      },]
-    },
-    {
-      name: 'prescription  420',
-      songs: [{
-        name: 'a',
-        duration: 120
-      },
-      {
-        name: 'b',
-        duration: 120
-      },
-      {
-        name: 'c',
-        duration: 120
-      },]
-    },
-    {
-      name: 'cherry picked',
-      songs: [{
-        name: 'a',
-        duration: 120
-      },
-      {
-        name: 'b',
-        duration: 120
-      },
-      {
-        name: 'c',
-        duration: 120
-      },]
-    },
-    {
-      name: 'from the vault',
-      songs: [{
-        name: 'a',
-        duration: 120
-      },
-      {
-        name: 'b',
-        duration: 120
-      },
-      {
-        name: 'c',
-        duration: 120
-      },]
-    },
-    {
-      name: 'call me naive',
-      songs: [{
-        name: 'a',
-        duration: 120
-      },
-      {
-        name: 'b',
-        duration: 120
-      },
-      {
-        name: 'c',
-        duration: 120
-      },]
-    },]
-  }
-}
-
 class PlaylistCounter extends Component {
   render() {
     return (
@@ -130,7 +49,7 @@ class Playlist extends Component {
     let playlist = this.props.playlist
     return (
       <div style={{ ...defaultStyle, display: 'inline-block', width: "30%" }}>
-        <img src={playlist.imageURL} style={{ width: '200px' }} />
+        <img src={playlist.imageURL} style={{ width: '60px' }} />
         <h3 style={{ color: 'Black' }}>{playlist.name}</h3>
         <ul>
           {playlist.songs.map(song =>
@@ -190,10 +109,9 @@ class App extends Component {
       })
       .then(playlists => this.setState({
         playlists: playlists.map(item => {
-          console.log(item.trackDatas)
           return {
             name: item.name,
-            imageURL: item.images.find(image=>image.height > '200').url,
+            imageURL: item.images[0].url,
             songs: item.trackDatas.slice(0,8)
           }
         })
