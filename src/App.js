@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
+import 'reset-css/reset.css';
 import './App.css';
 import queryString from 'query-string'
 
 
 let defaultStyle = {
-  color: '#fff'
+  color: '#fff',
+  'font-family': 'Arial'
+}
+
+let counterStyle = {
+  ...defaultStyle
+  , display: 'inline-block'
+  , width: "40%"
+  , 'margin-bottom': '10px'
+  , 'font-size': '20px'
+  , 'line-height': '30px'
+  , 'font-weight': 'bold'
 }
 
 class PlaylistCounter extends Component {
   render() {
+    let playlistDefaultStyle = counterStyle
     return (
-      <div style={{ ...defaultStyle, width: '40%', display: 'inline-block' }}>
+      <div style={playlistDefaultStyle}>
         <h2> {this.props.playlists.length} Playlists </h2>
       </div>
     )
@@ -25,9 +38,15 @@ class HoursCounter extends Component {
     let totalDuration = allSongs.reduce((sum, eachSong) => {
       return sum + eachSong.duration
     }, 0)
+    let totalDurationHours = Math.round(totalDuration / 3600)
+    let isTooLow = totalDurationHours < 5
+    let hoursDefaultStyle = {
+      ...counterStyle
+      , color: isTooLow ? 'red' : 'white'
+    }
     return (
-      <div style={{ ...defaultStyle, width: '40%', display: 'inline-block' }}>
-        <h2>{Math.round(totalDuration / 3600)} hours</h2>
+      <div style={hoursDefaultStyle}>
+        <h2>{totalDurationHours} hours</h2>
       </div>
     )
   }
@@ -38,7 +57,7 @@ class Filter extends Component {
       <div style={{ ...defaultStyle, padding: '30px' }}>
         <img />
         <input type="text" onKeyUp={event => this.props.onTextChange(event.target.value)} />
-        <h3 style={{ display: 'inline-block' }}>  Search </h3>
+        <h3 style={{ ...defaultStyle, 'font-weight': 'bold', display: 'inline-block', padding: '5px' }}>  Search </h3>
       </div>
     );
   }
@@ -48,9 +67,16 @@ class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
     return (
-      <div style={{ ...defaultStyle, display: 'inline-block', width: "30%" }}>
-        <img src={playlist.imageURL} style={{ width: '60px' }} />
-        <h3 style={{ color: 'Black' }}>{playlist.name}</h3>
+      <div style={{
+        ...defaultStyle
+        , display: 'inline-block'
+        , width: "30%"
+        , 'margin-bottom': '10px'
+        , padding: '10px'
+        , 'background-color': this.props.index % 2 ? '#008080' : '#DC7B66'
+      }}>
+        <h3 style={{ 'font-weight': 'bold', color: '#141417', padding: '5px' }}>{playlist.name}</h3>
+        <img src={playlist.imageURL} style={{ width: '60px', padding: '15px' }} />
         <ul>
           {playlist.songs.map(song =>
             <li>{song.name} - {song.popularity}</li>
@@ -112,7 +138,7 @@ class App extends Component {
           return {
             name: item.name,
             imageURL: item.images[0].url,
-            songs: item.trackDatas.slice(0,8)
+            songs: item.trackDatas.slice(0, 8)
           }
         })
       }))
@@ -120,27 +146,31 @@ class App extends Component {
 
 
   render() {
-    let playlistToRender = this.state.user && this.state.playlists ? this.state.playlists.filter(playlist =>
-    {
+    let playlistToRender = this.state.user && this.state.playlists ? this.state.playlists.filter(playlist => {
       let matchedPlaylists = playlist.name.toLowerCase().includes(this.state.filterString.toLowerCase())
       let matchedSongs = playlist.songs.find(song => song.name.toLowerCase().includes(this.state.filterString.toLowerCase()))
       return matchedPlaylists || matchedSongs
     })
-: []
-  
+      : []
+
     return (
       <div className="App">
         {this.state.user ?
           <div>
-            <h1 style={{ ...defaultStyle, 'font-size': '54px' }}>
+            <h1 style={{
+              ...defaultStyle
+              , 'font-size': '54px'
+              , 'margin-top': '50px'
+              , 'font-family': 'zapfino'
+            }}>
               {this.state.user.name}'s playlists
           </h1>
             <PlaylistCounter playlists={playlistToRender} />
             <HoursCounter playlists={playlistToRender} />
             <Filter onTextChange={text => this.setState({ filterString: text })} />
             {playlistToRender
-              .map(playlist =>
-                <Playlist playlist={playlist} />
+              .map((playlist, i) =>
+                <Playlist playlist={playlist} index={i} />
               )}
           </div> : <button onClick={() => { window.location = window.location.href.includes('localhost') ? 'http://localhost:8888/login' : 'https://react-playlists-backend.herokuapp.com/login' }
           }
