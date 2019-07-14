@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import 'reset-css/reset.css';
 import './App.css';
 import queryString from 'query-string'
+import { Route, BrowserRouter as Router } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 let defaultStyle = {
@@ -66,23 +68,28 @@ class Filter extends Component {
 class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
+    console.log(playlist)
     return (
-      <div style={{
-        ...defaultStyle
-        , display: 'inline-block'
-        , width: "30%"
-        , 'margin-bottom': '10px'
-        , padding: '10px'
-        , 'background-color': this.props.index % 2 ? '#008080' : '#DC7B66'
-      }}>
-        <h3 style={{ 'font-weight': 'bold', color: '#141417', padding: '5px' }}>{playlist.name}</h3>
-        <img src={playlist.imageURL} style={{ width: '60px', padding: '15px' }} />
-        <ul>
-          {playlist.songs.map(song =>
-            <li>{song.name} - {song.popularity}</li>
-          )}
-        </ul>
-      </div>
+      <Router>
+        <div style={{
+          ...defaultStyle
+          , display: 'inline-block'
+          , width: "30%"
+          , 'margin-bottom': '10px'
+          , padding: '10px'
+          , 'background-color': this.props.index % 2 ? '#008080' : '#DC7B66'
+        }}>
+          {/* <Route path='/privacy-policy' component={() => { window.location.href = playlist.href; return null; }} />
+          <Link to='/' params={playlist.href} style={{ 'font-weight': 'bold', color: '#141417', padding: '5px' }}>{playlist.name}</Link> */}
+          <img src={playlist.imageURL} style={{ width: '60px', padding: '15px' }} />
+          <ul>
+            {playlist.songs.map(song =>
+              <li> <a target="_blank" href={song.extLink}>{song.name} - {song.popularity}</a> </li>
+            )}
+          </ul>
+        </div>
+      </Router>
+
     );
   }
 }
@@ -126,7 +133,8 @@ class App extends Component {
               .map(trackData => ({
                 name: trackData.name,
                 duration: trackData.duration_ms / 1000,
-                popularity: trackData.popularity
+                popularity: trackData.popularity,
+                extLink: trackData.href
               }))
           })
           return pls
@@ -138,7 +146,8 @@ class App extends Component {
           return {
             name: item.name,
             imageURL: item.images[0].url,
-            songs: item.trackDatas.slice(0, 8)
+            songs: item.trackDatas.slice(0, 8),
+            extLink: item.href
           }
         })
       }))
