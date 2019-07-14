@@ -3,8 +3,6 @@ import 'reset-css/reset.css';
 import './App.css';
 import queryString from 'query-string'
 import { Route, BrowserRouter as Router } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-
 
 let defaultStyle = {
   color: '#fff',
@@ -83,13 +81,11 @@ class Playlist extends Component {
           <img src={playlist.imageURL} style={{ width: '60px', padding: '15px' }} />
           <ul>
             {playlist.songs.map(song =>
-              
-              <li> <a target="_blank" href={song.query}>{song.name} - {song.popularity}</a> </li>
+              <li> <a style={{'color': '#FFF'}} target="_blank" href={song.query}>{song.name} - {song.popularity}</a> </li>
             )}
           </ul>
         </div>
       </Router>
-
     );
   }
 }
@@ -161,7 +157,6 @@ class App extends Component {
       return matchedPlaylists || matchedSongs
     })
       : []
-
     return (
       <div className="App">
         {this.state.user ?
