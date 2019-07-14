@@ -79,12 +79,12 @@ class Playlist extends Component {
           , padding: '10px'
           , 'background-color': this.props.index % 2 ? '#008080' : '#DC7B66'
         }}>
-          {/* <Route path='/privacy-policy' component={() => { window.location.href = playlist.href; return null; }} />
-          <Link to='/' params={playlist.href} style={{ 'font-weight': 'bold', color: '#141417', padding: '5px' }}>{playlist.name}</Link> */}
+          <h3 style={{ 'font-weight': 'bold', color: '#141417', padding: '5px' }}>{playlist.name}</h3>
           <img src={playlist.imageURL} style={{ width: '60px', padding: '15px' }} />
           <ul>
             {playlist.songs.map(song =>
-              <li> <a target="_blank" href={song.extLink}>{song.name} - {song.popularity}</a> </li>
+              
+              <li> <a target="_blank" href={song.query}>{song.name} - {song.popularity}</a> </li>
             )}
           </ul>
         </div>
@@ -134,7 +134,7 @@ class App extends Component {
                 name: trackData.name,
                 duration: trackData.duration_ms / 1000,
                 popularity: trackData.popularity,
-                extLink: trackData.href
+                query: 'http://www.google.com/search?q=' + trackData.name + '+by+' + trackData.artists[0].name
               }))
           })
           return pls
