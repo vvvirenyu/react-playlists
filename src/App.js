@@ -66,7 +66,6 @@ class Filter extends Component {
 class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
-    console.log(playlist)
     return (
       <Router>
         <div style={{
